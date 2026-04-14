@@ -28,7 +28,7 @@ class PrimerManager( object ):
         self.primersearch = programs.PrimerSearch( )
     
                 
-    def findPrimers( self, sequences, outputFile, primerpairs = 20, returnPrimers = False ):
+    def findPrimers( self, sequences, outputFile, primerpairs = 20, returnPrimers = False, chunk_size = 10000 ):
         '''
         A method to find a set of primers based on the given sequences
         '''
@@ -57,13 +57,12 @@ class PrimerManager( object ):
             return
 
         # Chunk large sequences to avoid eprimer3/primer3 limits
-        MAX_CHUNK_SIZE = 10000
         processed_sequences = []
         for seq in sequences:
-            if len(seq) > MAX_CHUNK_SIZE:
-                utils.logMessage("PrimerManager::findPrimers()", f"Chunking large sequence of length {len(seq)}")
-                for i in range(0, len(seq), MAX_CHUNK_SIZE):
-                    chunk = seq[i : i + MAX_CHUNK_SIZE + 1000] # overlap to avoid missing pairs at boundaries
+            if len(seq) > chunk_size:
+                utils.logMessage("PrimerManager::findPrimers()", f"Chunking large sequence of length {len(seq)} with chunk_size {chunk_size}")
+                for i in range(0, len(seq), chunk_size):
+                    chunk = seq[i : i + chunk_size + 1000] # overlap to avoid missing pairs at boundaries
                     if len(chunk) >= min_prod:
                         processed_sequences.append(chunk)
             else:
@@ -99,7 +98,7 @@ class PrimerManager( object ):
             return all_primers
         
     
-    def getPrimers( self, sequences ):
+    def getPrimers( self, sequences, chunk_size=10000 ):
         
         utils.logMessage( "PrimerManager::getCommonPrimers", "finding primers that are common to all include files" )
             
@@ -109,7 +108,7 @@ class PrimerManager( object ):
         referenceEPrimerFile = utils.getTemporaryDirectory( ) + "/referenceprimers.ep3"
         
         #run eprimer to find primers in the reference file
-        primers = self.findPrimers( sequences, referenceEPrimerFile, 20, True )
+        primers = self.findPrimers( sequences, referenceEPrimerFile, 20, True, chunk_size=chunk_size )
         
         
         if len( primers ) == 0:

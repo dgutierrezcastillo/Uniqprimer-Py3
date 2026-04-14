@@ -12,10 +12,10 @@ from . import includefilemanager
 from . import excludefilemanager
 from . import primermanager
 
-VERSION = "0.5.3"
+VERSION = "0.5.4"
 
 class UniqPrimerFinder:
-    def __init__(self, include_files, exclude_files, cross_validate, eprimer_options, log_file, output_file, fasta_diff):
+    def __init__(self, include_files, exclude_files, cross_validate, eprimer_options, log_file, output_file, fasta_diff, chunk_size=10000):
         utils.logMessage("UniqPrimerFinder::__init__()", "Initializing UniqPrimerFinder")
         self.include_files = include_files
         self.include_file_manager = includefilemanager.IncludeFileManager()
@@ -30,6 +30,7 @@ class UniqPrimerFinder:
         self.output_file = output_file
         self.fasta_diff = fasta_diff
         self.eprimer_options = eprimer_options
+        self.chunk_size = chunk_size
 
         utils.logMessage("UniqPrimerFinder::__init__()", "Initializing UniqPrimerFinder - complete")
     
@@ -71,7 +72,8 @@ class UniqPrimerFinder:
         unique_sequences = self.include_file_manager.getUniqueSequences()
         
         utils.printProgressMessage("*** Finding Primers ***")
-        primers = self.primer_manager.getPrimers(unique_sequences)
+        # Pass the chunk size to the primer manager
+        primers = self.primer_manager.getPrimers(unique_sequences, chunk_size=self.chunk_size)
          
         if self.cross_validate:
             utils.printProgressMessage("*** Cross Validating Primers ***")
@@ -113,6 +115,9 @@ def parse_args():
     parser.add_argument("--mingc", type=float, default=20.0, help="Minimum GC percentage (default: 20.0)")
     parser.add_argument("--maxgc", type=float, default=80.0, help="Maximum GC percentage (default: 80.0)")
 
+    # Customizable chunking
+    parser.add_argument("--chunksize", type=int, default=10000, help="Maximum sequence length to send to primer3 at once (default: 10000)")
+
     parser.add_argument("--crossvalidate", action="store_true", help="Cross validate primers against exclude files")
     parser.add_argument("--keeptempfiles", action="store_true", help="Keep temporary files")
     parser.add_argument("-v", "--version", action="version", version=f"Uniqprimer {VERSION}")
@@ -140,7 +145,8 @@ def main():
         
         finder = UniqPrimerFinder(
             args.include, args.exclude, args.crossvalidate, 
-            eprimer_options, args.log, args.output, args.fasta
+            eprimer_options, args.log, args.output, args.fasta,
+            chunk_size=args.chunksize
         )
         finder.find_primers()
         
