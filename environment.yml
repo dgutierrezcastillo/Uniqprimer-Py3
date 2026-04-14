@@ -1,0 +1,14 @@
+name: uniqprimer
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - biopython=1.78
+  - mummer=3.23
+  - primer3=2.6.1
+  - emboss=6.6.0
+  - pip
+  - pip:
+    - .
