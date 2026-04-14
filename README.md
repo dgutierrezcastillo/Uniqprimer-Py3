@@ -44,6 +44,7 @@ uniqprimer -i target_genome.fasta -x exclude_genome.fasta -o primers.txt
 - `-i, --include`: Include FASTA file (can be specified multiple times).
 - `-x, --exclude`: Exclude FASTA file (can be specified multiple times).
 - `-o, --output`: Output file for primers (default: `uPrimer.txt`).
+- `--chunksize`: Maximum sequence length to send to primer3 at once (default: `10000`).
 - `--productsizerange`: PCR product size range (default: `200-250`).
 - `--mintm`, `--maxtm`, `--opttm`: Melting temperature constraints.
 - `--mingc`, `--maxgc`: GC content constraints.
