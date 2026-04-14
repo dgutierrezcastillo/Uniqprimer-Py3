@@ -14,8 +14,8 @@ Uniqprimer designs specific primers for bacterial sequences. It identifies genom
 
 ### 1. Using Conda (Recommended)
 ```bash
-git clone https://github.com/dgutierrezcastillo/Uniqprimer.git
-cd Uniqprimer
+git clone https://github.com/dgutierrezcastillo/Uniqprimer-Py3.git
+cd Uniqprimer-Py3
 conda env create -f environment.yml
 conda activate uniqprimer
 ```
