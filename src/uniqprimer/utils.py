@@ -87,39 +87,31 @@ def initialize(isVerbose, cleanup, lf):
     logMessage("utils::Initialize()", f"Initialization complete. Temporary directory: {tempDir}")
     
 def printProgressMessage(message):
-    global verbose
     if verbose:
         print(message)
 
 def getTemporaryDirectory():
-    global tempDir
     return tempDir
 
 def initializeLogging():
-    global logFile
     if logFile:
         logFile = open(logFile, 'w')
     
 def shutdown():
-    global removeTemp
-    global tempDir
     shutdownLogging()
     if removeTemp and tempDir and os.path.exists(tempDir):
         print("*** Removing temporary directory ***")
         shutil.rmtree(tempDir)
       
 def shutdownLogging():
-    global logFile
     if logFile is not None:
         logFile.close()
-        logFile = None
 
 def logList(method, lst):
     message = reduce(lambda x, y: f"{x} {y}", lst)
     logMessage(method, message)
     
 def logMessage(method, message):
-    global logFile
     if logFile is None:
         return
     log = f"{method} - {message}"
