@@ -79,8 +79,8 @@ def initialize(isVerbose, cleanup, lf):
     global verbose
     global logFile
 
-    logFile = lf
     verbose = isVerbose
+    logFile = lf
     tempDir = tempfile.mkdtemp()
     initializeLogging()
     removeTemp = cleanup
@@ -107,7 +107,7 @@ def shutdown():
     if removeTemp and tempDir and os.path.exists(tempDir):
         print("*** Removing temporary directory ***")
         shutil.rmtree(tempDir)
-    
+     
 def shutdownLogging():
     global logFile
     if logFile is not None:
