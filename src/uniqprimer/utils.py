@@ -107,7 +107,7 @@ def shutdown():
     if removeTemp and tempDir and os.path.exists(tempDir):
         print("*** Removing temporary directory ***")
         shutil.rmtree(tempDir)
-     
+      
 def shutdownLogging():
     global logFile
     if logFile is not None:
