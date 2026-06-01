@@ -94,6 +94,7 @@ def getTemporaryDirectory():
     return tempDir
 
 def initializeLogging():
+    global logFile
     if logFile:
         logFile = open(logFile, 'w')
     
