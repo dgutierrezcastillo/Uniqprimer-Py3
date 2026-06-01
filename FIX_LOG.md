@@ -1,0 +1,1 @@
+This job was fixed by adding the `global logFile` declaration in the `initializeLogging()` function to resolve the F823 flake8 error.
